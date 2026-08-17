@@ -50,6 +50,7 @@ uv run python run_local.py                      # full 720-step game vs built-in
 uv run python run_local.py --opponent random --games 5
 uv run python run_local.py --agent agents/experiment.py --opponent main.py
 uv run python run_local.py --replay             # save replay JSON for the visualizer
+uv run python run_local.py --html               # save interactive HTML visualizer (open in a browser)
 ```
 
 Built-in opponents: `pass`, `random`, `starter` (deterministic baseline).

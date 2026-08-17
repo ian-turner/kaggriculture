@@ -6,6 +6,7 @@ Usage:
     uv run python run_local.py --steps 200         # shorter episode
     uv run python run_local.py --games 5           # best-of series
     uv run python run_local.py --replay            # dump replay JSON to replays/
+    uv run python run_local.py --html              # save interactive HTML visualizer to replays/
 
 Built-in opponents: pass, random, starter. Any .py agent path also works.
 """
@@ -37,6 +38,7 @@ def main():
     parser.add_argument("--games", type=int, default=1, help="number of games to run")
     parser.add_argument("--seed", type=int, default=None, help="episode seed for reproducibility")
     parser.add_argument("--replay", action="store_true", help="save replay JSON to replays/")
+    parser.add_argument("--html", action="store_true", help="save interactive HTML visualizer to replays/")
     parser.add_argument("--quiet", action="store_true", help="disable env debug logging")
     args = parser.parse_args()
 
@@ -67,13 +69,18 @@ def main():
             f"statuses={statuses}  ({elapsed:.1f}s)"
         )
 
-        if args.replay:
+        if args.replay or args.html:
             replay_dir = Path(__file__).parent / "replays"
             replay_dir.mkdir(exist_ok=True)
             stamp = time.strftime("%Y%m%d-%H%M%S")
-            out = replay_dir / f"replay-{stamp}-g{game + 1}.json"
-            out.write_text(json.dumps(env.toJSON()))
-            print(f"  replay -> {out}")
+            if args.replay:
+                out = replay_dir / f"replay-{stamp}-g{game + 1}.json"
+                out.write_text(json.dumps(env.toJSON()))
+                print(f"  replay -> {out}")
+            if args.html:
+                out = replay_dir / f"replay-{stamp}-g{game + 1}.html"
+                out.write_text(env.render(mode="html"))
+                print(f"  html   -> {out}")
 
     if args.games > 1:
         print(f"\nrecord vs {args.opponent}: {wins}W-{losses}L-{ties}T")
