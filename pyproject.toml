@@ -1,0 +1,14 @@
+[project]
+name = "kaggriculture"
+version = "0.1.0"
+description = "Agent for the Kaggle Kaggriculture simulation competition"
+requires-python = ">=3.11"
+dependencies = [
+    "kaggle-environments>=1.16",
+    "kaggle>=1.6",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
